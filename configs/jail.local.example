@@ -1,0 +1,24 @@
+[DEFAULT]
+# Ban duration (seconds)
+bantime  = 3600
+findtime = 600
+maxretry = 3
+
+[jellyfin]
+# Enable this jail
+enabled  = true
+
+# Ports to protect
+port     = http,https
+
+# Use our custom filter
+filter   = jellyfin
+
+# Path to Jellyfin logs (mounted from Windows)
+logpath  = /mnt/jellyfin-logs/log_*.log
+
+# Action: block ALL ports from attacking IP
+action   = iptables-allports[name=jellyfin]
+
+# Log parsing backend - switched to "polling" because "auto" was not detecting matches to my rule as they occurred
+backend  = polling
