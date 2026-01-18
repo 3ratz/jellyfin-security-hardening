@@ -10,7 +10,7 @@ I initially setup a Caddy reverse proxy to provide secure remote access over HTT
 * **Fail2Ban:** Runs on the Raspberry Pi to monitor those shared logs.
 * **Iptables:** The Linux firewall used by Fail2Ban to block all traffic from an attacker's IP once a match is found.
 
-## The "Big Fixes" (Lessons Learned)
+## Issues I ran into (Lessons Learned)
 
 ### 1. The Polling Issue
 While testing, I was initially unable to trigger the jail rule. I was simulating bad passwords with my phone on a cellular connection, and while the Jellyfin logs were recording the denied attempts, Fail2Ban was not finding the match. I verified with the fail2ban-regex tool that my filter was correct, and then learned that I needed to set the log parsing backend to "polling" rather than "auto." This was necessary to continuously update Fail2Ban's view of the logs since they were being hosted over a network share.
