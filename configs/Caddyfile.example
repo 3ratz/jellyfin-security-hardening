@@ -1,0 +1,30 @@
+# Caddyfile - Reverse Proxy Configuration
+# Purpose: Handle SSL termination and forward traffic to Jellyfin
+
+<MY-DDNS-DOMAIN> {
+    # Security headers
+        header {
+                X-Frame-Options "SAMEORIGIN"
+                X-Content-Type-Options "nosniff"
+                X-XSS-Protection "1; mode=block"
+                Referrer-Policy "strict-origin-when-cross-origin"
+                # commment out the below line because it is causing problems
+                # Content-Security-Policy "default-src 'self'"
+                -Server
+        }
+
+        # Enable detailed access logging
+        log {
+                output file /var/log/caddy/jellyfin-access.log
+                format json
+        }
+
+        # Forward to Jellyfin with real client IP headers
+        reverse_proxy <JELLYFIN-INTERNAL-IP>:8096 {
+                # Pass real client IP to Jellyfin
+                header_up X-Real-IP {remote_host}
+                header_up X-Forwarded-For {remote_host}
+                header_up X-Forwarded-Proto {scheme}
+                header_up X-Forwarded-Host {host}
+        }
+}
